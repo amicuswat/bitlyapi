@@ -2,8 +2,6 @@ import os
 import sys
 
 import argparse
-
-import json
 import requests
 
 from urllib.parse import urlparse

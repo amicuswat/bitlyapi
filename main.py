@@ -16,7 +16,7 @@ def main():
     parser.add_argument('url')
     args = parser.parse_args()
 
-    bitlink_url = urlparse(args.url).netloc + urlparse(args.url).path
+    bitlink_url = f'{urlparse(args.url).netloc}{urlparse(args.url).path}'
 
     if is_bitlink(token, bitlink_url):
         print('Clicks:', count_clicks(token, bitlink_url))

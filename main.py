@@ -37,7 +37,6 @@ def is_bitlink(token, url):
 def shorten_link(token, url):
     headers = {
         'Authorization': f'Bearer {token}',
-        'Content-Type': 'application/json',
     }
 
     long_url = f'{{"long_url": "{url}"}}'

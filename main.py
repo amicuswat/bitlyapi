@@ -43,11 +43,9 @@ def shorten_link(token, url):
     data = f'{{"long_url": "{url}"}}' 
         
     response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, data=data)
+    response.raise_for_status()
 
-    if response.ok:
-        return response.json()['link']
-    else:
-        response.raise_for_status()
+    return response.json()['link']
 
 
 def count_clicks(token, url):
@@ -56,6 +54,8 @@ def count_clicks(token, url):
     }
 
     response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}/clicks/summary', headers=headers)
+    response.raise_for_status()
+
     return response.json()['total_clicks']
 
 

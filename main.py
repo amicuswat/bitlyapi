@@ -1,9 +1,9 @@
 import argparse
 import os
-from urllib.parse import urlparse
 
-import requests
 from dotenv import load_dotenv
+import requests
+from urllib.parse import urlparse
 
 
 def main():

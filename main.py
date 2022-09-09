@@ -23,15 +23,10 @@ def main():
     url_parsed = urlparse(url_)
     bitlink_url = url_parsed.netloc + url_parsed.path
 
-    bitlink_code = is_bitlink(token, bitlink_url)
-
-    if bitlink_code == 200:
+    if is_bitlink(token, bitlink_url):
         response = count_clicks(token, bitlink_url)
         clicks = response.json()['total_clicks']
-        print('Clicks:', clicks) 
-    elif bitlink_code == 403:
-        print('Error - you do not have acces to this bitlink')
-        sys.exit()
+        print('Clicks:', clicks)
     else:
         response = shorten_link(token, url_)
         if response.ok:
@@ -47,7 +42,7 @@ def is_bitlink(token, url):
 
     response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}', headers=headers)
 
-    return response.status_code
+    return response.ok
        
 
 def shorten_link(token, url):

@@ -1,9 +1,9 @@
 import argparse
 import os
-
-from dotenv import load_dotenv
-import requests
 from urllib.parse import urlparse
+
+import requests
+from dotenv import load_dotenv
 
 
 def main():
@@ -20,28 +20,28 @@ def main():
         print('Short link:', shorten_link(token, args.url))
    
 
-def get_bitlink_url(url):
-    url = f'{urlparse(url).netloc}{urlparse(url).path}'
-
-    return url
-
-
 def is_bitlink(token, url):
+    parsed_url = urlparse(url)
+    url = f'{parsed_url.netloc}{parsed_url.path}'
+
     headers = {
         'Authorization': f'Bearer {token}',
     }
 
-    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{get_bitlink_url(url)}', headers=headers)
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}', headers=headers)
 
     return response.ok
 
 
 def count_clicks(token, url):
+    parsed_url = urlparse(url)
+    url = f'{parsed_url.netloc}{parsed_url.path}'
+
     headers = {
         'Authorization': f'Bearer {token}',
     }
 
-    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{get_bitlink_url(url)}/clicks/summary', headers=headers)
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}/clicks/summary', headers=headers)
     response.raise_for_status()
 
     return response.json()['total_clicks']

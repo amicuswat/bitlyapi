@@ -1,10 +1,8 @@
-import os
-import sys
-
 import argparse
-import requests
-
+import os
 from urllib.parse import urlparse
+
+import requests
 from dotenv import load_dotenv
 
 
@@ -26,7 +24,6 @@ def get_bitlink_url(url):
     url = f'{urlparse(url).netloc}{urlparse(url).path}'
 
     return url
-
 
 
 def is_bitlink(token, url):

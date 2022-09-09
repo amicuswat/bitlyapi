@@ -40,9 +40,9 @@ def shorten_link(token, url):
         'Content-Type': 'application/json',
     }
 
-    data = f'{{"long_url": "{url}"}}' 
+    long_url = f'{{"long_url": "{url}"}}'
         
-    response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, data=data)
+    response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, data=long_url)
     response.raise_for_status()
 
     return response.json()['link']

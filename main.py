@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 def main():
     load_dotenv()
-    token = os.getenv('TOKEN')
+    token = os.getenv('BITLY_TOKEN')
 
     parser = argparse.ArgumentParser()
     parser.add_argument('url')

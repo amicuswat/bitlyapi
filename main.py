@@ -16,15 +16,14 @@ def main():
     parser.add_argument('url')
     args = parser.parse_args()
 
-    bitlink_url = f'{urlparse(args.url).netloc}{urlparse(args.url).path}'
-
-    if is_bitlink(token, bitlink_url):
-        print('Clicks:', count_clicks(token, bitlink_url))
+    if is_bitlink(token, args.url):
+        print('Clicks:', count_clicks(token, args.url))
     else:
         print('Short link:', shorten_link(token, args.url))
    
 
 def is_bitlink(token, url):
+    url = f'{urlparse(url).netloc}{urlparse(url).path}'
     headers = {
         'Authorization': f'Bearer {token}',
     }
@@ -32,6 +31,18 @@ def is_bitlink(token, url):
     response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}', headers=headers)
 
     return response.ok
+
+
+def count_clicks(token, url):
+    url = f'{urlparse(url).netloc}{urlparse(url).path}'
+    headers = {
+        'Authorization': f'Bearer {token}',
+    }
+
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}/clicks/summary', headers=headers)
+    response.raise_for_status()
+
+    return response.json()['total_clicks']
        
 
 def shorten_link(token, url):
@@ -45,17 +56,6 @@ def shorten_link(token, url):
     response.raise_for_status()
 
     return response.json()['link']
-
-
-def count_clicks(token, url):
-    headers = {
-        'Authorization': f'Bearer {token}',
-    }
-
-    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}/clicks/summary', headers=headers)
-    response.raise_for_status()
-
-    return response.json()['total_clicks']
 
 
 if __name__ == '__main__':

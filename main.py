@@ -22,24 +22,29 @@ def main():
         print('Short link:', shorten_link(token, args.url))
    
 
-def is_bitlink(token, url):
+def get_bitlink_url(url):
     url = f'{urlparse(url).netloc}{urlparse(url).path}'
+
+    return url
+
+
+
+def is_bitlink(token, url):
     headers = {
         'Authorization': f'Bearer {token}',
     }
 
-    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}', headers=headers)
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{get_bitlink_url(url)}', headers=headers)
 
     return response.ok
 
 
 def count_clicks(token, url):
-    url = f'{urlparse(url).netloc}{urlparse(url).path}'
     headers = {
         'Authorization': f'Bearer {token}',
     }
 
-    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{url}/clicks/summary', headers=headers)
+    response = requests.get(f'https://api-ssl.bitly.com/v4/bitlinks/{get_bitlink_url(url)}/clicks/summary', headers=headers)
     response.raise_for_status()
 
     return response.json()['total_clicks']
@@ -50,9 +55,13 @@ def shorten_link(token, url):
         'Authorization': f'Bearer {token}',
     }
 
-    long_url = f'{{"long_url": "{url}"}}'
-        
-    response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, data=long_url)
+    long_url = {
+        "long_url": url,
+    }
+
+    print(long_url)
+
+    response = requests.post('https://api-ssl.bitly.com/v4/shorten', headers=headers, json=long_url)
     response.raise_for_status()
 
     return response.json()['link']
